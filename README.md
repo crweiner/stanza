@@ -2,6 +2,8 @@
 
 Stanza is a minimal, type-forward WordPress block theme for personal publishing.
 
+![Stanza front page](docs/screenshots/front-page-desktop.jpg)
+
 ## Installable ZIP
 
 The repository root is the theme root. To build an installable ZIP from a clone:
@@ -31,6 +33,26 @@ The default `Front Page` template keeps the background hero and classic feed. Ad
 
 Create or edit a page, choose one of these templates in the page settings, and publish it to preview or use that composition.
 
+### Profile + Parallax Feed
+
+![Profile hero and parallax feed in dark mode](docs/screenshots/home-profile-parallax-desktop-dark.jpg)
+
+![Profile hero and parallax feed in light mode](docs/screenshots/home-profile-parallax-desktop-light.jpg)
+
+### Side Hero + Typographic Feed
+
+![Side hero and typographic feed in dark mode](docs/screenshots/home-side-typographic-desktop-dark.jpg)
+
+![Side hero and typographic feed in light mode](docs/screenshots/home-side-typographic-desktop-light.jpg)
+
+![Side hero and typographic feed on mobile in light mode](docs/screenshots/home-side-typographic-mobile-light.jpg)
+
+### Background Hero + Typographic Feed
+
+![Background hero and typographic feed in dark mode](docs/screenshots/home-background-typographic-desktop-dark.jpg)
+
+![Background hero and typographic feed in light mode](docs/screenshots/home-background-typographic-desktop-light.jpg)
+
 ## Project Templates
 
 Stanza includes a `Projects Index` page template and a `Project Detail` page template.
@@ -38,6 +60,10 @@ Stanza includes a `Projects Index` page template and a `Project Detail` page tem
 Use `Projects Index` for the main Projects page. It includes the `Project index` pattern: square-cornered project cards with an orange eyebrow, an H3 title, body copy, and a link to the project sub-page.
 
 Use `Project Detail` for individual project pages. The template renders the page title, the page content, and a related-posts section filtered to the `projects` category slug. For the editable project description and external links, insert the `Project detail content` pattern into the page content and update the links for that project.
+
+![Projects index page](docs/screenshots/projects-desktop.jpg)
+
+![Project detail page](docs/screenshots/project-detail-desktop.jpg)
 
 ### Project Card Accent Classes
 

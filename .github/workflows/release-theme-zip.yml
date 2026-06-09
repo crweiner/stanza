@@ -29,6 +29,7 @@ jobs:
           unzip -l stanza.zip | grep -q 'stanza/theme.json'
           unzip -l stanza.zip | grep -q 'stanza/templates/index.html'
           ! unzip -l stanza.zip | grep -q 'stanza/README.md'
+          ! unzip -l stanza.zip | grep -q 'stanza/docs/'
           ! unzip -l stanza.zip | grep -q 'stanza/.github/'
           ! unzip -l stanza.zip | grep -q 'stanza/.git'
 
