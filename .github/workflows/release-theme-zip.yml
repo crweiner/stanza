@@ -1,0 +1,45 @@
+name: Release theme ZIP
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Build installable theme ZIP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build stanza.zip
+        run: git archive --format=zip --prefix=stanza/ HEAD -o stanza.zip
+
+      - name: Verify ZIP contents
+        run: |
+          unzip -l stanza.zip
+          unzip -l stanza.zip | grep -q 'stanza/style.css'
+          unzip -l stanza.zip | grep -q 'stanza/readme.txt'
+          unzip -l stanza.zip | grep -q 'stanza/theme.json'
+          unzip -l stanza.zip | grep -q 'stanza/templates/index.html'
+          ! unzip -l stanza.zip | grep -q 'stanza/README.md'
+          ! unzip -l stanza.zip | grep -q 'stanza/.github/'
+          ! unzip -l stanza.zip | grep -q 'stanza/.git'
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: stanza-theme
+          path: stanza.zip
+
+      - name: Attach ZIP to GitHub release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: stanza.zip

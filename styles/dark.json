@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Dark",
+	"styles": {
+		"color": {
+			"background": "#15171a",
+			"text": "#ffffff"
+		},
+		"elements": {
+			"link": {
+				"color": {
+					"text": "#ffffff"
+				}
+			}
+		}
+	}
+}
