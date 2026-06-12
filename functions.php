@@ -149,9 +149,18 @@ add_action( 'init', 'stanza_pattern_categories' );
  */
 function stanza_category_link_classes( $links ) {
 	foreach ( $links as &$link ) {
-		if ( preg_match( '/category\/([^\/"]+)\//', $link, $m ) || preg_match( '/cat=(\d+)[^"]*"[^>]*>([^<]+)</', $link, $m ) ) {
-			$slug = sanitize_html_class( strtolower( $m[1] ) );
-			$link = str_replace( '<a ', '<a class="stanza-category-' . esc_attr( $slug ) . '" ', $link );
+		$slug = '';
+		if ( preg_match( '/category\/([^\/"]+)\//', $link, $m ) ) {
+			$slug = urldecode( $m[1] );
+		} elseif ( preg_match( '/[?&]cat=(\d+)/', $link, $m ) ) {
+			$term = get_term( (int) $m[1], 'category' );
+			if ( $term instanceof WP_Term ) {
+				$slug = $term->slug;
+			}
+		}
+		if ( '' !== $slug ) {
+			$class = sanitize_html_class( strtolower( $slug ) );
+			$link  = str_replace( '<a ', '<a class="stanza-category-' . esc_attr( $class ) . '" ', $link );
 		}
 	}
 	return $links;
@@ -182,10 +191,3 @@ function stanza_link_pages_args( $args ) {
 	return $args;
 }
 add_filter( 'wp_link_pages_args', 'stanza_link_pages_args' );
-
-/**
- * MailPoet form id used by the stanza/subscribe-form block's plugin slot
- * (see blocks/subscribe-form/render.php). Site owners set it via:
- *   add_filter( 'stanza_mailpoet_form_id', fn() => 3 );
- * or hook 'stanza_subscribe_form_html' to supply arbitrary provider markup.
- */

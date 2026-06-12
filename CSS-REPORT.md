@@ -4,7 +4,9 @@ Every selector shipped outside `theme.json`, per the build contract
 (`blueprint/02-css-disposition.md`). Everything else in the theme is theme.json
 presets/styles, block supports carried in markup, or block style variations.
 
-**Totals: 664 non-blank lines across 14 files** (WPCS one-declaration-per-line
+**Totals: 692 non-blank lines across 14 files** (28 of which are the
+explicit `:focus-visible`/`:focus-within` accent rings on every custom
+interactive control — the handoff's "visible focus everywhere" floor) (WPCS one-declaration-per-line
 formatting, selectors and braces included), vs **2,544 lines in v1** — a 76%
 reduction. The disposition doc targeted ≤350 (hard 450); the overage is
 explained per file below and falls into five buckets: (a) accessibility rules

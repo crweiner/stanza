@@ -33,7 +33,7 @@ $stanza_terms = get_the_term_list( $stanza_post_id, 'category', '', '' );
 >
 	<?php if ( $stanza_image_id ) : ?>
 	<div class="stanza-parallax-card__media">
-		<?php echo wp_get_attachment_image( $stanza_image_id, 'full', false, array( 'loading' => 'lazy', 'alt' => '' ) ); ?>
+		<?php echo wp_get_attachment_image( $stanza_image_id, 'full', false, array( 'loading' => 'lazy' ) ); ?>
 	</div>
 	<?php endif; ?>
 	<div class="stanza-parallax-card__scrim" style="background:rgba(0,0,0,<?php echo esc_attr( $stanza_dim ); ?>)"></div>

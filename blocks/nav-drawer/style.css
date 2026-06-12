@@ -16,6 +16,14 @@
 	height: 24px;
 }
 
+.stanza-nav-drawer__toggle:focus-visible,
+.stanza-nav-drawer__close:focus-visible,
+.stanza-nav-drawer__nav .wp-block-navigation-submenu__toggle:focus-visible,
+.stanza-nav-drawer__nav .wp-block-navigation-item__content:focus-visible {
+	outline: 2px solid var(--wp--preset--color--brand-accent);
+	outline-offset: 2px;
+}
+
 @media (min-width: 768px) {
 	.stanza-nav-drawer {
 		display: none;
