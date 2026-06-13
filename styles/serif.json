@@ -4,7 +4,13 @@
 	"title": "Serif",
 	"styles": {
 		"typography": {
-			"fontFamily": "var(--font-serif)"
+			"fontFamily": "var:preset|font-family|libre-baskerville",
+			"fontWeight": "400"
+		},
+		"elements": {
+			"heading": {
+				"typography": { "fontWeight": "700" }
+			}
 		}
 	}
 }

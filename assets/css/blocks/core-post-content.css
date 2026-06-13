@@ -1,0 +1,46 @@
+.wp-block-post-content :where(p, li, dd, td) > code {
+	padding: 0.1em 0.35em;
+	font-family: var(--wp--preset--font-family--jetbrains-mono);
+	font-size: 0.88em;
+	color: var(--wp--preset--color--foreground);
+	background: color-mix(in srgb, var(--wp--preset--color--brand-accent) 14%, transparent);
+	border: 1px solid color-mix(in srgb, var(--wp--preset--color--brand-accent) 28%, transparent);
+	border-radius: 4px;
+}
+
+.stanza-page-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	align-items: center;
+	margin-top: 2.5em;
+	font-size: var(--wp--preset--font-size--meta);
+	font-weight: 700;
+	color: var(--wp--preset--color--foreground);
+}
+
+.stanza-page-links-label {
+	color: var(--wp--preset--color--tertiary-text);
+}
+
+.stanza-page-links :where(a, .post-page-numbers) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 36px;
+	min-height: 36px;
+	padding: 6px 12px;
+	text-decoration: none;
+	border: 1px solid var(--wp--preset--color--border);
+	border-radius: var(--wp--preset--border-radius--pill, 72px);
+}
+
+.stanza-page-links a:hover {
+	border-color: var(--wp--preset--color--brand-accent);
+}
+
+.stanza-page-links .current {
+	color: var(--wp--custom--accent-ink);
+	background: var(--wp--preset--color--brand-accent);
+	border-color: var(--wp--preset--color--brand-accent);
+}

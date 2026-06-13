@@ -1,0 +1,7 @@
+.wp-block-post-title a {
+	transition: opacity 0.2s linear;
+}
+
+.wp-block-post-title a:hover {
+	opacity: 0.8;
+}

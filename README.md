@@ -16,12 +16,16 @@ Upload `stanza.zip` in WordPress at **Appearance > Themes > Add New > Upload The
 
 ## Theme Structure
 
-- `theme.json` maps the Stanza design tokens into WordPress global styles.
-- `templates/` contains block templates for home, posts, pages, archives, search, author, tag, 404, and style guide.
-- `parts/` contains reusable header and footer template parts.
-- `patterns/` contains hero, feed, and subscribe CTA block patterns.
-- `styles/` contains dark, serif, and mono style variations.
-- `assets/` contains local fonts, icons, JavaScript, and imagery.
+- `theme.json` is the single source of truth: every color, font size, font family, spacing step, radius, and shadow exists exactly once, as a preset. The neutral palette is built on CSS `light-dark()` pairs, so dark mode needs no JavaScript.
+- `templates/` contains block templates for home, posts, pages, archives, search, author, tag, 404, projects, and the style guide.
+- `parts/` contains reusable header, overlay header, and footer template parts.
+- `patterns/` contains hero, feed, subscribe CTA, and project block patterns.
+- `styles/` contains dark, light, serif, and mono style variations.
+- `blocks/` contains four build-less custom blocks (block.json + render.php + Interactivity API view modules): color mode toggle, subscribe form, parallax card, and an accessible mobile nav drawer.
+- `assets/css/blocks/` contains one stylesheet per core block type, loaded on demand with `wp_enqueue_block_style()` — there is no monolithic stylesheet.
+- `assets/` contains local fonts, icons, and imagery.
+
+See `CSS-REPORT.md` for every hand-written CSS rule and why it exists, and `DRIFT-LOG.md` for the intentional differences from v1.
 
 ## Home Template Variants
 
@@ -65,101 +69,52 @@ Use `Project Detail` for individual project pages. The template renders the page
 
 ![Project detail page](docs/screenshots/project-detail-desktop.jpg)
 
-### Project Card Accent Classes
+### Project Card Accents
 
-Project cards use the theme color tokens through CSS helper classes. In the block editor, select a project card Group block, open **Advanced**, and add one of these classes in **Additional CSS class(es)**:
-
-```text
-st-project-card is-brand
-st-project-card is-clay
-st-project-card is-mustard
-st-project-card is-sage
-st-project-card is-petrol
-st-project-card is-plum
-```
-
-Use the same color modifier on project link cards in the Project Detail pattern:
-
-```text
-st-project-link-card is-brand
-st-project-link-card is-clay
-st-project-link-card is-mustard
-st-project-link-card is-sage
-st-project-link-card is-petrol
-st-project-link-card is-plum
-```
-
-The base class controls the card layout. The `is-*` class only changes the accent token used for the top border and future project-card accents.
+Project cards are Group blocks using the **Project card** block style. The accent bar is the block's own top border: select the card, open **Border**, and pick any palette color (Brand accent, Clay, Mustard, Sage, Petrol, Plum). No helper classes are needed — the v1 `st-project-card is-*` class map was removed in 2.0.
 
 Suggested meanings:
 
-- `is-brand`: Featured, primary, or newest project.
-- `is-clay`: Members, subscriptions, or commercial work.
-- `is-mustard`: Reading, references, books, or source material.
-- `is-sage`: Projects and evergreen content.
-- `is-petrol`: Photography, media, travel, or visual archives.
-- `is-plum`: Notes, personal logs, or process writing.
-
-These classes are best used inside the bundled Project patterns. For ordinary blocks, prefer the Site Editor color controls first. Use Advanced CSS classes when you need the theme's purpose-built component styling, such as project cards or category chips.
+- Brand accent: Featured, primary, or newest project.
+- Clay: Members, subscriptions, or commercial work.
+- Mustard: Reading, references, books, or source material.
+- Sage: Projects and evergreen content.
+- Petrol: Photography, media, travel, or visual archives.
+- Plum: Notes, personal logs, or process writing.
 
 ## Category Accents
 
-Stanza includes a small built-in category accent map in `style.css`, keyed by category slug. Do not edit the installed parent theme's `style.css` for site-specific category colors; parent theme files can be replaced during a theme update.
+Stanza includes a small category accent map in `assets/css/blocks/core-post-terms.css`, keyed by category slug. The theme adds `stanza-category-{slug}` classes to rendered category links, so accents work whether the site uses pretty permalinks or plain `?cat=ID` category URLs.
 
-For update-safe category accents, add rules in one of these places:
-
-- **Site Editor > Styles > Additional CSS:** Best for normal site-specific category colors.
-- **Child theme CSS:** Best when the custom category map should be packaged with other site-level theme changes.
-- **Small site plugin:** Best when the category map should stay independent from any active theme.
-
-Use the same selector shape in whichever update-safe place you choose:
+For update-safe custom category accents, add rules in **Site Editor > Styles > Additional CSS**, a child theme, or a small site plugin — never by editing the installed parent theme files:
 
 ```css
-.taxonomy-category .st-category-new-slug {
-	--st-category-accent: var(--tag-sage);
+.taxonomy-category .stanza-category-new-slug {
+	--stanza-category-accent: var(--wp--preset--color--tag-sage);
 }
 ```
-
-The theme adds `st-category-{slug}` classes to rendered category links, so these accents work whether the site uses pretty permalinks or plain `?cat=ID` category URLs.
-
-### Using Theme Color Classes in the Editor
-
-For blocks that support colors, use **Styles > Colors** in the Site Editor or block sidebar. Stanza exposes the theme palette there: Brand accent, Clay, Mustard, Sage, Petrol, Plum, Background, Foreground, Surface, and Secondary text.
-
-Use **Advanced > Additional CSS class(es)** for Stanza component helpers:
-
-- Project cards: add `st-project-card` plus an `is-*` color class.
-- Project detail link cards: add `st-project-link-card` plus an `is-*` color class.
-- Manual category chips: add `st-category-term` plus a category class such as `st-category-projects`.
-
-Example manual category chip markup in a Paragraph or custom link context:
-
-```html
-<a class="st-category-term st-category-projects" href="/category/projects/">Projects</a>
-```
-
-For post category links rendered by WordPress, Stanza adds `st-category-{slug}` classes automatically. You only need to add category classes manually for static demo text, hand-built links, or custom block layouts.
 
 A child theme should be packaged and installed as its own theme with its own theme folder and `style.css` header. Do not bundle a child theme inside the Stanza parent theme ZIP and expect WordPress to install both themes automatically.
 
 ## Newsletter and Subscription Forms
 
-Stanza ships styled subscribe forms in the hero and CTA patterns. They are intentionally front-end markup only; a newsletter or membership plugin should own the actual signup, list sync, double opt-in, and consent behavior.
+The hero and CTA patterns use the `stanza/subscribe-form` block — a pill email capture with a pluggable provider slot. A newsletter or membership plugin owns the actual signup, list sync, double opt-in, and consent behavior; without a provider the form renders disabled and says so. It never pretends to subscribe anyone.
 
-Recommended integration options:
+Provider slot priority:
 
-- Replace the inner form with your plugin's form block or shortcode, then keep the wrapper class `st-subscribe-input`.
-- If the plugin supports custom form classes, add `st-subscribe-input` to the form wrapper and keep a single email field plus submit button.
-- If the plugin opens a modal, change the form to a button/link that triggers the plugin modal and keep the same `st-subscribe-input` visual wrapper.
+1. **`stanza_subscribe_form_html` filter** — return any provider's form markup (Jetpack Forms, Mailchimp embed, a membership modal trigger) and the block wraps it in the pill styling:
 
-Plugin-specific notes:
+   ```php
+   add_filter( 'stanza_subscribe_form_html', fn () => $my_form_markup );
+   ```
 
-- **MailPoet:** Insert a MailPoet form block or shortcode where the current form sits. Add `st-subscribe-input` to the form/container when possible. The theme includes button/input rules for common MailPoet submit markup.
-- **Jetpack Forms:** Replace the static form with a Jetpack Form block. Use the same surrounding section/pattern and apply `st-subscribe-input` to the compact form wrapper if the editor exposes an Additional CSS class field.
-- **Mailchimp:** Use the official Mailchimp block/plugin shortcode or an embedded form action URL. Keep the email input and submit button inside the `st-subscribe-input` wrapper.
-- **Membership tools:** For MemberPress, Paid Memberships Pro, Newspack, or similar tools, use the subscribe pill as a modal trigger or checkout link instead of posting the theme's static form.
+2. **MailPoet** — with MailPoet active, return a form id from the `stanza_mailpoet_form_id` filter and the block renders that form, normalized to the pill look:
 
-Do not rely on the default theme form action (`/`) for production subscriptions. Replace it with a real plugin form, shortcode, modal trigger, or checkout URL before launch.
+   ```php
+   add_filter( 'stanza_mailpoet_form_id', fn () => 3 );
+   ```
+
+3. **Native form action** — set the block's "Form action URL" attribute to a real endpoint (e.g. a list provider's POST URL).
 
 ## Code Blocks
 

@@ -1,0 +1,29 @@
+.wp-block-post-comments-form input:not([type="checkbox"]):not([type="submit"]),
+.wp-block-post-comments-form textarea {
+	width: 100%;
+	padding: 12px 14px;
+	color: var(--wp--preset--color--foreground);
+	background: var(--wp--preset--color--background);
+	border: 1px solid var(--wp--preset--color--border);
+}
+
+.wp-block-post-comments-form input[type="submit"] {
+	min-height: 44px;
+	padding: 0 22px;
+	font-weight: 700;
+	color: var(--wp--custom--accent-ink);
+	cursor: pointer;
+	background: var(--wp--preset--color--brand-accent);
+	border: 0;
+	border-radius: var(--wp--preset--border-radius--pill, 72px);
+}
+
+.wp-block-post-comments-form input[type="submit"]:hover {
+	background: var(--wp--custom--accent-hover);
+}
+
+.wp-block-post-comments-form input:focus-visible,
+.wp-block-post-comments-form textarea:focus-visible {
+	outline: 2px solid var(--wp--preset--color--brand-accent);
+	outline-offset: 2px;
+}

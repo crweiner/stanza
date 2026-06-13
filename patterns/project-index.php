@@ -8,116 +8,44 @@
  * @package Stanza
  */
 
+$stanza_project_cards = array(
+	array( 'brand-accent', __( 'Theme system', 'stanza' ), __( 'Stanza for WordPress', 'stanza' ), __( 'A block-first publishing theme built around large type, a calm canvas, and portable patterns for personal sites.', 'stanza' ) ),
+	array( 'tag-clay', __( 'Members', 'stanza' ), __( 'Membership experiments', 'stanza' ), __( 'A project space for subscriber offers, private updates, launches, and paid-community writing.', 'stanza' ) ),
+	array( 'tag-mustard', __( 'Reading', 'stanza' ), __( 'Reading system', 'stanza' ), __( 'A running index for books, references, reading notes, and source material behind longer essays.', 'stanza' ) ),
+	array( 'tag-sage', __( 'Evergreen', 'stanza' ), __( 'Field notes archive', 'stanza' ), __( 'A long-running project collecting essays, notes, and reference posts that stay useful after the week they were published.', 'stanza' ) ),
+	array( 'tag-petrol', __( 'Media', 'stanza' ), __( 'Photography index', 'stanza' ), __( 'A visual archive for travel, process, and image-led writing, organized as a project rather than a chronological feed.', 'stanza' ) ),
+	array( 'tag-plum', __( 'Notes', 'stanza' ), __( 'Personal log', 'stanza' ), __( 'A quieter project for short updates, process notes, small discoveries, and personal publishing rituals.', 'stanza' ) ),
+);
 ?>
-<!-- wp:group {"tagName":"section","className":"st-project-index","layout":{"type":"default"}} -->
-<section class="wp-block-group st-project-index">
-	<!-- wp:paragraph -->
-	<p>A working shelf for projects, tools, experiments, and evergreen bodies of work. Each card can point to a dedicated sub-project page.</p>
+<!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"bottom":"var:preset|spacing|200"},"blockGap":"var:preset|spacing|80"}},"layout":{"type":"constrained"}} -->
+<section class="wp-block-group" style="padding-bottom:var(--wp--preset--spacing--200)">
+	<!-- wp:paragraph {"align":"wide","textColor":"secondary-text"} -->
+	<p class="alignwide has-secondary-text-color has-text-color">A working shelf for projects, tools, experiments, and evergreen bodies of work. Each card can point to a dedicated sub-project page.</p>
 	<!-- /wp:paragraph -->
 
-	<!-- wp:group {"className":"st-project-grid","layout":{"type":"default"}} -->
-	<div class="wp-block-group st-project-grid">
-		<!-- wp:group {"tagName":"article","className":"st-project-card is-brand","layout":{"type":"default"}} -->
-		<article class="wp-block-group st-project-card is-brand">
-			<!-- wp:paragraph {"className":"st-project-eyebrow"} -->
-			<p class="st-project-eyebrow">Theme system</p>
+	<!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"var:preset|spacing|60"}},"layout":{"type":"grid","minimumColumnWidth":"22rem"}} -->
+	<div class="wp-block-group alignwide">
+		<?php foreach ( $stanza_project_cards as $stanza_card ) : list( $stanza_accent, $stanza_eyebrow, $stanza_title, $stanza_body ) = $stanza_card; ?>
+		<!-- wp:group {"tagName":"article","className":"is-style-project-card","backgroundColor":"surface","style":{"border":{"top":{"color":"var:preset|color|<?php echo esc_attr( $stanza_accent ); ?>","width":"4px","style":"solid"}},"spacing":{"padding":{"top":"var:preset|spacing|80","right":"var:preset|spacing|80","bottom":"var:preset|spacing|80","left":"var:preset|spacing|80"}}},"layout":{"type":"default"}} -->
+		<article class="wp-block-group is-style-project-card has-surface-background-color has-background" style="border-top-color:var(--wp--preset--color--<?php echo esc_attr( $stanza_accent ); ?>);border-top-style:solid;border-top-width:4px;padding-top:var(--wp--preset--spacing--80);padding-right:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80);padding-left:var(--wp--preset--spacing--80)">
+			<!-- wp:paragraph {"textColor":"brand-accent","fontSize":"meta","fontFamily":"jetbrains-mono","style":{"typography":{"fontWeight":"700"}}} -->
+			<p class="has-brand-accent-color has-text-color has-jetbrains-mono-font-family has-meta-font-size" style="font-weight:700"><?php echo esc_html( $stanza_eyebrow ); ?></p>
 			<!-- /wp:paragraph -->
-			<!-- wp:heading {"level":3} -->
-			<h3 class="wp-block-heading">Stanza for WordPress</h3>
-			<!-- /wp:heading -->
-			<!-- wp:paragraph -->
-			<p>A block-first publishing theme built around large type, a calm canvas, and portable patterns for personal sites.</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"className":"st-project-card-link"} -->
-			<p class="st-project-card-link"><a href="#">View project &rarr;</a></p>
-			<!-- /wp:paragraph -->
-		</article>
-		<!-- /wp:group -->
 
-		<!-- wp:group {"tagName":"article","className":"st-project-card is-clay","layout":{"type":"default"}} -->
-		<article class="wp-block-group st-project-card is-clay">
-			<!-- wp:paragraph {"className":"st-project-eyebrow"} -->
-			<p class="st-project-eyebrow">Members</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:heading {"level":3} -->
-			<h3 class="wp-block-heading">Membership experiments</h3>
+			<!-- wp:heading {"level":3,"fontSize":"heading-4"} -->
+			<h3 class="wp-block-heading has-heading-4-font-size"><?php echo esc_html( $stanza_title ); ?></h3>
 			<!-- /wp:heading -->
-			<!-- wp:paragraph -->
-			<p>A project space for subscriber offers, private updates, launches, and paid-community writing.</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"className":"st-project-card-link"} -->
-			<p class="st-project-card-link"><a href="#">View project &rarr;</a></p>
-			<!-- /wp:paragraph -->
-		</article>
-		<!-- /wp:group -->
 
-		<!-- wp:group {"tagName":"article","className":"st-project-card is-mustard","layout":{"type":"default"}} -->
-		<article class="wp-block-group st-project-card is-mustard">
-			<!-- wp:paragraph {"className":"st-project-eyebrow"} -->
-			<p class="st-project-eyebrow">Reading</p>
+			<!-- wp:paragraph {"textColor":"secondary-text"} -->
+			<p class="has-secondary-text-color has-text-color"><?php echo esc_html( $stanza_body ); ?></p>
 			<!-- /wp:paragraph -->
-			<!-- wp:heading {"level":3} -->
-			<h3 class="wp-block-heading">Reading system</h3>
-			<!-- /wp:heading -->
-			<!-- wp:paragraph -->
-			<p>A running index for books, references, reading notes, and source material behind longer essays.</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"className":"st-project-card-link"} -->
-			<p class="st-project-card-link"><a href="#">View project &rarr;</a></p>
-			<!-- /wp:paragraph -->
-		</article>
-		<!-- /wp:group -->
 
-		<!-- wp:group {"tagName":"article","className":"st-project-card is-sage","layout":{"type":"default"}} -->
-		<article class="wp-block-group st-project-card is-sage">
-			<!-- wp:paragraph {"className":"st-project-eyebrow"} -->
-			<p class="st-project-eyebrow">Evergreen</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:heading {"level":3} -->
-			<h3 class="wp-block-heading">Field notes archive</h3>
-			<!-- /wp:heading -->
-			<!-- wp:paragraph -->
-			<p>A long-running project collecting essays, notes, and reference posts that stay useful after the week they were published.</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"className":"st-project-card-link"} -->
-			<p class="st-project-card-link"><a href="#">View project &rarr;</a></p>
+			<!-- wp:paragraph {"style":{"typography":{"fontWeight":"700"}}} -->
+			<p style="font-weight:700"><a href="#"><?php esc_html_e( 'View project →', 'stanza' ); ?></a></p>
 			<!-- /wp:paragraph -->
 		</article>
 		<!-- /wp:group -->
-
-		<!-- wp:group {"tagName":"article","className":"st-project-card is-petrol","layout":{"type":"default"}} -->
-		<article class="wp-block-group st-project-card is-petrol">
-			<!-- wp:paragraph {"className":"st-project-eyebrow"} -->
-			<p class="st-project-eyebrow">Media</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:heading {"level":3} -->
-			<h3 class="wp-block-heading">Photography index</h3>
-			<!-- /wp:heading -->
-			<!-- wp:paragraph -->
-			<p>A visual archive for travel, process, and image-led writing, organized as a project rather than a chronological feed.</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"className":"st-project-card-link"} -->
-			<p class="st-project-card-link"><a href="#">View project &rarr;</a></p>
-			<!-- /wp:paragraph -->
-		</article>
-		<!-- /wp:group -->
-
-		<!-- wp:group {"tagName":"article","className":"st-project-card is-plum","layout":{"type":"default"}} -->
-		<article class="wp-block-group st-project-card is-plum">
-			<!-- wp:paragraph {"className":"st-project-eyebrow"} -->
-			<p class="st-project-eyebrow">Notes</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:heading {"level":3} -->
-			<h3 class="wp-block-heading">Personal log</h3>
-			<!-- /wp:heading -->
-			<!-- wp:paragraph -->
-			<p>A quieter project for short updates, process notes, small discoveries, and personal publishing rituals.</p>
-			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"className":"st-project-card-link"} -->
-			<p class="st-project-card-link"><a href="#">View project &rarr;</a></p>
-			<!-- /wp:paragraph -->
-		</article>
-		<!-- /wp:group -->
+		<?php endforeach; ?>
 	</div>
 	<!-- /wp:group -->
 </section>
