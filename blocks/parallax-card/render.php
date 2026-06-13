@@ -5,15 +5,24 @@
  * @package Stanza
  */
 
+defined( 'ABSPATH' ) || exit;
+
 $stanza_post_id = isset( $block->context['postId'] ) ? (int) $block->context['postId'] : 0;
 if ( ! $stanza_post_id ) {
 	return;
 }
 
-$stanza_image_id   = get_post_thumbnail_id( $stanza_post_id );
-$stanza_min_height = ! empty( $attributes['minHeight'] ) ? $attributes['minHeight'] : '480px';
-$stanza_dim        = max( 0, min( 100, (int) ( $attributes['dimOpacity'] ?? 55 ) ) ) / 100;
-$stanza_parallax   = ! empty( $attributes['parallax'] ) && $stanza_image_id && ! is_admin();
+$stanza_image_id = get_post_thumbnail_id( $stanza_post_id );
+
+// minHeight is an editor-supplied attribute injected into an inline style; only
+// allow a bare CSS length so a malformed value can't add unexpected declarations.
+$stanza_min_height = '480px';
+if ( ! empty( $attributes['minHeight'] ) && preg_match( '/^\d+(\.\d+)?(px|rem|em|vh|vw|%)$/', $attributes['minHeight'] ) ) {
+	$stanza_min_height = $attributes['minHeight'];
+}
+
+$stanza_dim      = max( 0, min( 100, (int) ( $attributes['dimOpacity'] ?? 55 ) ) ) / 100;
+$stanza_parallax = ! empty( $attributes['parallax'] ) && $stanza_image_id && ! is_admin();
 
 $stanza_wrapper = get_block_wrapper_attributes(
 	array(
@@ -33,7 +42,19 @@ $stanza_terms = get_the_term_list( $stanza_post_id, 'category', '', '' );
 >
 	<?php if ( $stanza_image_id ) : ?>
 	<div class="stanza-parallax-card__media">
-		<?php echo wp_get_attachment_image( $stanza_image_id, 'full', false, array( 'loading' => 'lazy' ) ); ?>
+		<?php
+		// Bounded size + srcset, not the full original: a feed of these cards
+		// would otherwise ship several multi-megabyte images on one uncached view.
+		echo wp_get_attachment_image(
+			$stanza_image_id,
+			'1536x1536',
+			false,
+			array(
+				'loading' => 'lazy',
+				'sizes'   => '100vw',
+			)
+		);
+		?>
 	</div>
 	<?php endif; ?>
 	<div class="stanza-parallax-card__scrim" style="background:rgba(0,0,0,<?php echo esc_attr( $stanza_dim ); ?>)"></div>

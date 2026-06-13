@@ -9,6 +9,8 @@
  * @package Stanza
  */
 
+defined( 'ABSPATH' ) || exit;
+
 $stanza_wrapper = get_block_wrapper_attributes( array( 'class' => 'stanza-subscribe-form' ) );
 
 $stanza_custom_html = apply_filters( 'stanza_subscribe_form_html', '', $attributes );

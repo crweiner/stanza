@@ -5,6 +5,8 @@
  * @package Stanza
  */
 
+defined( 'ABSPATH' ) || exit;
+
 $stanza_wrapper = get_block_wrapper_attributes( array( 'class' => 'stanza-color-mode-toggle' ) );
 ?>
 <button
