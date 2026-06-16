@@ -1,250 +1,195 @@
 <?php
 /**
- * Stanza functions and definitions.
+ * Stanza v2 functions and definitions.
+ *
+ * CANONICAL SOURCE — copy verbatim into the theme root.
+ * Everything styling-related here is either:
+ *   (a) a block style variation registration, or
+ *   (b) a per-block stylesheet enqueue (wp_enqueue_block_style → inlined on demand), or
+ *   (c) a behavior filter ported from v1 (data/markup, not style).
+ * There is NO global stylesheet enqueue beyond style.css (theme header + reported utilities).
  *
  * @package Stanza
  */
 
+defined( 'ABSPATH' ) || exit;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Theme supports
+// ─────────────────────────────────────────────────────────────────────────────
+
 if ( ! function_exists( 'stanza_setup' ) ) :
-	/**
-	 * Sets up theme defaults.
-	 *
-	 * @return void
-	 */
 	function stanza_setup() {
-		add_theme_support( 'automatic-feed-links' );
-		add_theme_support( 'title-tag' );
 		add_theme_support( 'wp-block-styles' );
-		add_theme_support( 'responsive-embeds' );
-		add_theme_support( 'align-wide' );
 		add_theme_support( 'editor-styles' );
-		add_editor_style( 'style.css' );
+		add_theme_support( 'post-thumbnails' );
+		add_theme_support( 'responsive-embeds' );
+		add_theme_support( 'html5', array( 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption', 'style', 'script' ) );
 	}
 endif;
 add_action( 'after_setup_theme', 'stanza_setup' );
 
-if ( ! function_exists( 'stanza_enqueue_assets' ) ) :
-	/**
-	 * Enqueues front-end assets.
-	 *
-	 * @return void
-	 */
-	function stanza_enqueue_assets() {
-		$theme = wp_get_theme();
+// ─────────────────────────────────────────────────────────────────────────────
+// Theme stylesheet (header + the few reported utilities only).
+// ─────────────────────────────────────────────────────────────────────────────
 
-		wp_enqueue_style(
-			'stanza-style',
-			get_stylesheet_uri(),
-			array(),
-			$theme->get( 'Version' )
-		);
+function stanza_styles() {
+	wp_enqueue_style( 'stanza-style', get_stylesheet_uri(), array(), wp_get_theme()->get( 'Version' ) );
+}
+add_action( 'wp_enqueue_scripts', 'stanza_styles' );
 
-		wp_style_add_data(
-			'stanza-style',
-			'path',
-			get_stylesheet_directory() . '/style.css'
-		);
+// ─────────────────────────────────────────────────────────────────────────────
+// Per-block stylesheets — one file per block type, inlined only when the block
+// renders. NEVER add a monolithic stylesheet here.
+// ─────────────────────────────────────────────────────────────────────────────
 
-		wp_enqueue_script(
-			'stanza-color-mode',
-			get_theme_file_uri( 'assets/js/color-mode.js' ),
-			array(),
-			$theme->get( 'Version' ),
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
+function stanza_block_style_sheet( $block, $path ) {
+	wp_enqueue_block_style(
+		$block,
+		array(
+			'handle' => 'stanza-' . str_replace( '/', '-', $block ),
+			'src'    => get_theme_file_uri( $path ),
+			'path'   => get_theme_file_path( $path ),
+			'ver'    => wp_get_theme()->get( 'Version' ),
+		)
+	);
+}
+
+function stanza_block_styles() {
+	stanza_block_style_sheet( 'core/navigation', 'assets/css/blocks/core-navigation.css' );
+	stanza_block_style_sheet( 'core/post-terms', 'assets/css/blocks/core-post-terms.css' );
+	stanza_block_style_sheet( 'core/group', 'assets/css/blocks/core-group.css' );
+	stanza_block_style_sheet( 'core/post-content', 'assets/css/blocks/core-post-content.css' );
+	stanza_block_style_sheet( 'core/search', 'assets/css/blocks/core-search.css' );
+	stanza_block_style_sheet( 'core/post-comments-form', 'assets/css/blocks/core-post-comments-form.css' );
+	stanza_block_style_sheet( 'core/post-title', 'assets/css/blocks/core-post-title.css' );
+	stanza_block_style_sheet( 'core/loginout', 'assets/css/blocks/core-loginout.css' );
+	stanza_block_style_sheet( 'core/paragraph', 'assets/css/blocks/core-paragraph.css' );
+}
+add_action( 'init', 'stanza_block_styles' );
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Block style variations. CSS for each lives in the matching per-block file.
+// ─────────────────────────────────────────────────────────────────────────────
+
+function stanza_register_block_styles() {
+	// Feed card: image-right two-column card (feed-classic pattern).
+	register_block_style( 'core/group', array(
+		'name'  => 'card-classic',
+		'label' => __( 'Classic card', 'stanza' ),
+	) );
+
+	// Project card: surface panel, accent top border, hover lift.
+	register_block_style( 'core/group', array(
+		'name'  => 'project-card',
+		'label' => __( 'Project card', 'stanza' ),
+	) );
+
+	// Kicker: small accent pill label (projects index, style guide).
+	register_block_style( 'core/paragraph', array(
+		'name'  => 'kicker',
+		'label' => __( 'Kicker', 'stanza' ),
+	) );
+
+	// Search: pill input + embedded button.
+	register_block_style( 'core/search', array(
+		'name'  => 'pill',
+		'label' => __( 'Pill', 'stanza' ),
+	) );
+}
+add_action( 'init', 'stanza_register_block_styles' );
+
+// NOTE: button "outline" and "secondary" variations are defined in theme.json
+// (styles.blocks.core/button.variations) — no CSS, no registration needed here.
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Custom blocks (build-less; block.json + render.php + Interactivity API).
+// ─────────────────────────────────────────────────────────────────────────────
+
+function stanza_register_blocks() {
+	foreach ( array( 'color-mode-toggle', 'subscribe-form', 'parallax-card', 'nav-drawer' ) as $block ) {
+		register_block_type( get_theme_file_path( "blocks/{$block}" ) );
 	}
-endif;
-add_action( 'wp_enqueue_scripts', 'stanza_enqueue_assets' );
+}
+add_action( 'init', 'stanza_register_blocks' );
 
-if ( ! function_exists( 'stanza_print_color_mode_bootstrap' ) ) :
-	/**
-	 * Prints a small head script so dark mode resolves before first paint.
-	 *
-	 * @return void
-	 */
-	function stanza_print_color_mode_bootstrap() {
-		$script = "(function(){try{var s=localStorage.getItem('stanza-color-mode');var d=s==='dark'||(!s&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('has-light-text',d);document.documentElement.style.setProperty('--background-color',d?'#15171a':'#ffffff');}catch(e){}})();";
+// ─────────────────────────────────────────────────────────────────────────────
+// Color mode pre-paint bootstrap. Pairs with blocks/color-mode-toggle and the
+// light-dark() palette in theme.json. No classes, no variable rewriting —
+// setting color-scheme is the entire mechanism. See blueprint/04-color-modes.md.
+// ─────────────────────────────────────────────────────────────────────────────
 
-		if ( function_exists( 'wp_print_inline_script_tag' ) ) {
-			wp_print_inline_script_tag( $script );
-			return;
-		}
+function stanza_color_mode_bootstrap() {
+	?>
+	<script>
+	try{var m=localStorage.getItem("stanza-color-mode");if(m==="light"||m==="dark"){document.documentElement.style.colorScheme=m;}}catch(e){}
+	</script>
+	<?php
+}
+add_action( 'wp_head', 'stanza_color_mode_bootstrap', 0 );
 
-		printf( '<script>%s</script>', $script ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	}
-endif;
-add_action( 'wp_head', 'stanza_print_color_mode_bootstrap', 0 );
+// ─────────────────────────────────────────────────────────────────────────────
+// Pattern category.
+// ─────────────────────────────────────────────────────────────────────────────
 
-if ( ! function_exists( 'stanza_render_multipage_content_links' ) ) :
-	/**
-	 * Appends links for posts split with the Next Page block/comment.
-	 *
-	 * @param string $block_content The rendered Post Content block.
-	 * @return string
-	 */
-	function stanza_render_multipage_content_links( $block_content ) {
-		if ( is_admin() || is_feed() || ! is_singular() || ! in_the_loop() ) {
-			return $block_content;
-		}
-
-		$page_links = wp_link_pages(
-			array(
-				'before'      => '<nav class="st-page-links" aria-label="' . esc_attr__( 'Post pages', 'stanza' ) . '"><span class="st-page-links__label">' . esc_html__( 'Pages:', 'stanza' ) . '</span>',
-				'after'       => '</nav>',
-				'link_before' => '<span class="st-page-links__item">',
-				'link_after'  => '</span>',
-				'echo'        => 0,
-			)
-		);
-
-		return $block_content . $page_links;
-	}
-endif;
-add_filter( 'render_block_core/post-content', 'stanza_render_multipage_content_links' );
-
-if ( ! function_exists( 'stanza_add_category_link_classes' ) ) :
-	/**
-	 * Adds stable category slug classes to category term links.
-	 *
-	 * @param string[] $links Category term links.
-	 * @return string[]
-	 */
-	function stanza_add_category_link_classes( $links ) {
-		if ( ! is_array( $links ) || ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
-			return $links;
-		}
-
-		static $categories = null;
-
-		if ( null === $categories ) {
-			$categories = get_terms(
-				array(
-					'taxonomy'   => 'category',
-					'hide_empty' => false,
-				)
-			);
-
-			if ( is_wp_error( $categories ) ) {
-				$categories = array();
-			}
-		}
-
-		foreach ( $links as $index => $link ) {
-			$term = stanza_get_category_from_link( $link, $categories );
-
-			if ( ! $term ) {
-				continue;
-			}
-
-			$processor = new WP_HTML_Tag_Processor( $link );
-
-			if ( $processor->next_tag( 'a' ) ) {
-				$processor->add_class( 'st-category-term' );
-				$processor->add_class( 'st-category-' . sanitize_html_class( $term->slug ) );
-				$links[ $index ] = $processor->get_updated_html();
-			}
-		}
-
-		return $links;
-	}
-endif;
-add_filter( 'term_links-category', 'stanza_add_category_link_classes' );
-
-if ( ! function_exists( 'stanza_filter_project_posts_query' ) ) :
-	/**
-	 * Limits Project Posts query-loop patterns to the Projects category.
-	 *
-	 * @param array    $query Query arguments prepared for WP_Query.
-	 * @param WP_Block $block Query block instance.
-	 * @return array
-	 */
-	function stanza_filter_project_posts_query( $query, $block ) {
-		if ( ! is_array( $query ) || ! is_object( $block ) || empty( $block->context ) || ! is_array( $block->context ) ) {
-			return $query;
-		}
-
-		$category_slug = $block->context['query']['stanzaCategorySlug'] ?? '';
-
-		if ( 'projects' !== $category_slug ) {
-			return $query;
-		}
-
-		$query['category_name'] = 'projects';
-
-		return $query;
-	}
-endif;
-add_filter( 'query_loop_block_query_vars', 'stanza_filter_project_posts_query', 10, 2 );
-
-if ( ! function_exists( 'stanza_get_category_from_link' ) ) :
-	/**
-	 * Matches a rendered category link back to its term object.
-	 *
-	 * @param string    $link       Rendered category link.
-	 * @param WP_Term[] $categories Category terms.
-	 * @return WP_Term|null
-	 */
-	function stanza_get_category_from_link( $link, $categories ) {
-		if ( ! is_array( $categories ) ) {
-			return null;
-		}
-
-		$normalized_link = html_entity_decode( $link, ENT_QUOTES, get_bloginfo( 'charset' ) );
-		$link_text       = trim( wp_strip_all_tags( $link ) );
-
-		foreach ( $categories as $category ) {
-			if ( ! $category instanceof WP_Term ) {
-				continue;
-			}
-
-			if (
-				preg_match( '/[?&]cat=' . preg_quote( (string) $category->term_id, '/' ) . '(?:[&#]|$)/', $normalized_link )
-				|| preg_match( '#/category/' . preg_quote( $category->slug, '#' ) . '(?:/|$)#', $normalized_link )
-				|| $link_text === $category->name
-			) {
-				return $category;
-			}
-		}
-
-		return null;
-	}
-endif;
-
-if ( ! function_exists( 'stanza_pattern_categories' ) ) :
-	/**
-	 * Registers Stanza pattern categories.
-	 *
-	 * @return void
-	 */
-	function stanza_pattern_categories() {
-		register_block_pattern_category(
-			'stanza',
-			array(
-				'label'       => __( 'Stanza', 'stanza' ),
-				'description' => __( 'Stanza hero, feed, CTA, and publishing layouts.', 'stanza' ),
-			)
-		);
-	}
-endif;
+function stanza_pattern_categories() {
+	register_block_pattern_category( 'stanza', array(
+		'label' => __( 'Stanza', 'stanza' ),
+	) );
+}
 add_action( 'init', 'stanza_pattern_categories' );
 
-if ( ! function_exists( 'stanza_block_styles' ) ) :
-	/**
-	 * Registers small block style affordances used by the theme.
-	 *
-	 * @return void
-	 */
-	function stanza_block_styles() {
-		register_block_style(
-			'core/button',
-			array(
-				'name'  => 'secondary',
-				'label' => __( 'Secondary', 'stanza' ),
-			)
-		);
+// ─────────────────────────────────────────────────────────────────────────────
+// Behavior filters ported from v1 (markup/data — not style). Class prefix
+// renamed st- → stanza-; the matching CSS lives in per-block files.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Add stanza-category-{slug} classes to category links so the per-term accent
+ * map in assets/css/blocks/core-post-terms.css works with pretty and plain
+ * permalinks alike.
+ */
+function stanza_category_link_classes( $links ) {
+	foreach ( $links as &$link ) {
+		$slug = '';
+		if ( preg_match( '/category\/([^\/"]+)\//', $link, $m ) ) {
+			$slug = urldecode( $m[1] );
+		} elseif ( preg_match( '/[?&]cat=(\d+)/', $link, $m ) ) {
+			$term = get_term( (int) $m[1], 'category' );
+			if ( $term instanceof WP_Term ) {
+				$slug = $term->slug;
+			}
+		}
+		if ( '' !== $slug ) {
+			$class = sanitize_html_class( strtolower( $slug ) );
+			$link  = str_replace( '<a ', '<a class="stanza-category-' . esc_attr( $class ) . '" ', $link );
+		}
 	}
-endif;
-add_action( 'init', 'stanza_block_styles' );
+	return $links;
+}
+add_filter( 'term_links-category', 'stanza_category_link_classes' );
+
+/**
+ * Let a Query Loop filter by category slug via the block's "stanzaCategorySlug"
+ * attribute (used by the project-posts pattern).
+ */
+function stanza_query_loop_category( $query, $block ) {
+	if ( ! empty( $block->context['query']['stanzaCategorySlug'] ) ) {
+		$query['category_name'] = sanitize_title( $block->context['query']['stanzaCategorySlug'] );
+	}
+	return $query;
+}
+add_filter( 'query_loop_block_query_vars', 'stanza_query_loop_category', 10, 2 );
+
+/**
+ * Multipage post navigation markup (wp_link_pages), styled by
+ * assets/css/blocks/core-post-content.css.
+ */
+function stanza_link_pages_args( $args ) {
+	$args['before']      = '<nav class="stanza-page-links" aria-label="' . esc_attr__( 'Page', 'stanza' ) . '"><span class="stanza-page-links-label">' . esc_html__( 'Pages', 'stanza' ) . '</span>';
+	$args['after']       = '</nav>';
+	$args['link_before'] = '<span class="stanza-page-link">';
+	$args['link_after']  = '</span>';
+	return $args;
+}
+add_filter( 'wp_link_pages_args', 'stanza_link_pages_args' );

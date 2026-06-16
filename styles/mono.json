@@ -4,7 +4,13 @@
 	"title": "Mono",
 	"styles": {
 		"typography": {
-			"fontFamily": "var(--font-mono)"
+			"fontFamily": "var:preset|font-family|jetbrains-mono",
+			"fontWeight": "400"
+		},
+		"elements": {
+			"heading": {
+				"typography": { "fontWeight": "800" }
+			}
 		}
 	}
 }

@@ -1,0 +1,98 @@
+.stanza-parallax-card {
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+
+.stanza-parallax-card.is-imageless {
+	background: var(--wp--preset--color--tag-petrol);
+}
+
+.stanza-parallax-card__media {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+}
+
+.stanza-parallax-card__media img {
+	position: absolute;
+	top: -8%;
+	left: 0;
+	width: 100%;
+	height: 116%;
+	object-fit: cover;
+}
+
+.stanza-parallax-card__scrim {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+}
+
+.stanza-parallax-card__body {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--40);
+	padding: var(--wp--preset--spacing--160) var(--wp--preset--spacing--120);
+	color: var(--wp--preset--color--white);
+}
+
+.stanza-parallax-card__title {
+	margin: 0;
+	font-size: var(--wp--preset--font-size--heading-1);
+	font-weight: 800;
+	line-height: var(--wp--custom--line-height--tight);
+}
+
+.stanza-parallax-card__title a {
+	color: var(--wp--preset--color--white);
+	text-decoration: none;
+	transition: opacity 0.2s linear;
+}
+
+.stanza-parallax-card__title a:hover {
+	opacity: 0.8;
+}
+
+.stanza-parallax-card__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wp--preset--spacing--30);
+	align-items: center;
+	font-size: var(--wp--preset--font-size--meta);
+	color: rgba(255, 255, 255, 0.82);
+}
+
+.stanza-parallax-card__date {
+	color: inherit;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.stanza-parallax-card__terms a {
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 14px;
+	color: var(--wp--preset--color--white);
+	font-weight: 700;
+	text-decoration: none;
+	border: 1px solid rgba(255, 255, 255, 0.42);
+	border-radius: var(--wp--preset--border-radius--chip, 24px);
+	transition: background 0.2s linear;
+}
+
+.stanza-parallax-card__terms a:hover,
+.stanza-parallax-card__terms a:focus-visible {
+	color: var(--wp--preset--color--white);
+	background: rgba(255, 255, 255, 0.16);
+}
+
+@media (max-width: 781px) {
+	.stanza-parallax-card__body {
+		padding: var(--wp--preset--spacing--120) var(--wp--preset--spacing--80);
+	}
+}

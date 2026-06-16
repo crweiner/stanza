@@ -1,0 +1,30 @@
+.wp-block-loginout a {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 40px;
+	padding: 0 20px;
+	line-height: 1;
+	color: var(--wp--preset--color--foreground);
+	white-space: nowrap;
+	text-decoration: none;
+	background: transparent;
+	border: 1px solid var(--wp--preset--color--border);
+	border-radius: var(--wp--preset--border-radius--button, 40px);
+	transition: background-color 0.2s var(--wp--custom--easing);
+}
+
+.wp-block-loginout a:hover,
+.wp-block-loginout a:focus-visible {
+	background: var(--wp--preset--color--surface);
+}
+
+.stanza-header-overlay .wp-block-loginout a {
+	color: var(--wp--preset--color--white);
+	border-color: rgba(255, 255, 255, 0.4);
+}
+
+.stanza-header-overlay .wp-block-loginout a:hover,
+.stanza-header-overlay .wp-block-loginout a:focus-visible {
+	background: rgba(255, 255, 255, 0.12);
+}

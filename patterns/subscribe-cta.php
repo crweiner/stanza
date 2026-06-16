@@ -9,22 +9,16 @@
  */
 
 ?>
-<!-- wp:group {"tagName":"section","className":"st-cta","layout":{"type":"default"}} -->
-<section id="subscribe" class="wp-block-group st-cta">
+<!-- wp:group {"tagName":"section","anchor":"subscribe","align":"wide","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|160","right":"var:preset|spacing|160","bottom":"var:preset|spacing|160","left":"var:preset|spacing|160"},"blockGap":"var:preset|spacing|40"}},"layout":{"type":"constrained","justifyContent":"left"}} -->
+<section id="subscribe" class="wp-block-group alignwide has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--160);padding-right:var(--wp--preset--spacing--160);padding-bottom:var(--wp--preset--spacing--160);padding-left:var(--wp--preset--spacing--160)">
 	<!-- wp:heading {"level":3} -->
-	<h3>Get the next essay in your inbox</h3>
+	<h3 class="wp-block-heading">Get the next essay in your inbox</h3>
 	<!-- /wp:heading -->
 
-	<!-- wp:paragraph -->
-	<p>Join the list for new writing, notes, and member updates.</p>
+	<!-- wp:paragraph {"textColor":"secondary-text"} -->
+	<p class="has-secondary-text-color has-text-color">Join the list for new writing, notes, and member updates.</p>
 	<!-- /wp:paragraph -->
 
-	<!-- wp:html -->
-	<form class="st-subscribe-input" action="/" method="get">
-		<label class="screen-reader-text" for="stanza-cta-email">Email address</label>
-		<input id="stanza-cta-email" type="email" name="email" placeholder="jamie@example.com" autocomplete="email" />
-		<button type="submit">Subscribe</button>
-	</form>
-	<!-- /wp:html -->
+	<!-- wp:stanza/subscribe-form /-->
 </section>
 <!-- /wp:group -->

@@ -2,11 +2,13 @@
 
 <!-- wp:group {"tagName":"main","layout":{"type":"default"}} -->
 <main class="wp-block-group">
-	<!-- wp:group {"tagName":"header","className":"st-term-header st-wide","layout":{"type":"default"}} -->
-	<header class="wp-block-group st-term-header st-wide">
-		<!-- wp:avatar {"size":104,"className":"st-author-image"} /-->
-		<!-- wp:query-title {"type":"archive","showPrefix":false} /-->
-		<!-- wp:term-description /-->
+	<!-- wp:group {"tagName":"header","style":{"spacing":{"padding":{"top":"var(--wp--custom--header-spacing)"},"blockGap":"var:preset|spacing|40"}},"layout":{"type":"constrained"}} -->
+	<header class="wp-block-group" style="padding-top:var(--wp--custom--header-spacing)">
+		<!-- wp:avatar {"size":104,"align":"wide","style":{"border":{"radius":"50%"}}} /-->
+
+		<!-- wp:query-title {"type":"archive","showPrefix":false,"align":"wide","fontSize":"display"} /-->
+
+		<!-- wp:term-description {"align":"wide","textColor":"secondary-text"} /-->
 	</header>
 	<!-- /wp:group -->
 

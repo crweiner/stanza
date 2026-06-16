@@ -1,0 +1,10 @@
+p.is-style-kicker {
+	width: fit-content;
+	padding: 4px 12px;
+	font-size: var(--wp--preset--font-size--meta);
+	font-weight: 700;
+	line-height: var(--wp--custom--line-height--normal);
+	color: var(--wp--custom--accent-ink);
+	background: var(--wp--preset--color--brand-accent);
+	border-radius: var(--wp--preset--border-radius--pill, 72px);
+}

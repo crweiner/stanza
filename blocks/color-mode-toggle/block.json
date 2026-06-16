@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "stanza/color-mode-toggle",
+	"title": "Color mode toggle",
+	"category": "theme",
+	"icon": "lightbulb",
+	"description": "Sun/moon button that lets visitors override the site color scheme.",
+	"textdomain": "stanza",
+	"supports": {
+		"html": false,
+		"interactivity": true
+	},
+	"render": "file:./render.php",
+	"style": "file:./style.css",
+	"viewScriptModule": "file:./view.js",
+	"editorScript": "file:./index.js"
+}

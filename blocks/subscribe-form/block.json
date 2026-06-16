@@ -1,0 +1,49 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "stanza/subscribe-form",
+	"title": "Subscribe form",
+	"category": "theme",
+	"icon": "email",
+	"description": "Pill email capture with a pluggable newsletter-provider slot.",
+	"textdomain": "stanza",
+	"attributes": {
+		"placeholder": {
+			"type": "string",
+			"default": "jamie@example.com"
+		},
+		"buttonText": {
+			"type": "string",
+			"default": "Subscribe"
+		},
+		"successMessage": {
+			"type": "string",
+			"default": ""
+		},
+		"formAction": {
+			"type": "string",
+			"default": ""
+		},
+		"inputId": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"interactivity": true,
+		"color": {
+			"background": true,
+			"text": true,
+			"link": false
+		},
+		"spacing": {
+			"margin": true
+		}
+	},
+	"render": "file:./render.php",
+	"style": "file:./style.css",
+	"viewScriptModule": "file:./view.js",
+	"editorScript": "file:./index.js"
+}
