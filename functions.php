@@ -193,3 +193,60 @@ function stanza_link_pages_args( $args ) {
 	return $args;
 }
 add_filter( 'wp_link_pages_args', 'stanza_link_pages_args' );
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Newsletter provider detection for the stanza/subscribe-form block.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * The MailPoet form the subscribe-form block falls back to.
+ *
+ * MailPoet exposes no public API for listing forms, so this reads the oldest
+ * enabled, non-deleted form straight from its table and caches the id. The
+ * result is only ever used as the DEFAULT for the `stanza_mailpoet_form_id`
+ * filter, so a site that wants a specific form can still override it:
+ *
+ *     add_filter( 'stanza_mailpoet_form_id', fn() => 42 );
+ *
+ * @return int Form ID, or 0 when MailPoet is inactive or has no usable form.
+ */
+function stanza_default_mailpoet_form_id() {
+	if ( ! class_exists( '\MailPoet\API\API' ) ) {
+		return 0;
+	}
+
+	$cached = get_transient( 'stanza_mailpoet_form_id' );
+	if ( false !== $cached ) {
+		return (int) $cached;
+	}
+
+	global $wpdb;
+
+	$table = $wpdb->prefix . 'mailpoet_forms';
+
+	// Table name is built from the site prefix and a fixed MailPoet suffix, so it
+	// cannot be prepared; the query takes no user input. Suppress errors so an
+	// unmigrated MailPoet install degrades to the placeholder instead of a notice.
+	$suppress = $wpdb->suppress_errors( true );
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$form_id = (int) $wpdb->get_var(
+		"SELECT id FROM `{$table}` WHERE status = 'enabled' AND deleted_at IS NULL ORDER BY id ASC LIMIT 1"
+	);
+	// phpcs:enable
+	$wpdb->suppress_errors( $suppress );
+
+	set_transient( 'stanza_mailpoet_form_id', $form_id, HOUR_IN_SECONDS );
+
+	return $form_id;
+}
+
+/**
+ * Drop the cached form id when the plugin set changes, so activating MailPoet
+ * or publishing a first form takes effect without waiting out the transient.
+ */
+function stanza_flush_mailpoet_form_cache() {
+	delete_transient( 'stanza_mailpoet_form_id' );
+}
+add_action( 'activated_plugin', 'stanza_flush_mailpoet_form_cache' );
+add_action( 'deactivated_plugin', 'stanza_flush_mailpoet_form_cache' );
+add_action( 'switch_theme', 'stanza_flush_mailpoet_form_cache' );

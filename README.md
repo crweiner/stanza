@@ -108,11 +108,15 @@ Provider slot priority:
    add_filter( 'stanza_subscribe_form_html', fn () => $my_form_markup );
    ```
 
-2. **MailPoet** — with MailPoet active, return a form id from the `stanza_mailpoet_form_id` filter and the block renders that form, normalized to the pill look:
+2. **MailPoet** — detected automatically. With MailPoet active, the block renders your oldest enabled MailPoet form, normalized to the pill look; installing MailPoet and publishing a form is all that is required, with no code.
+
+   To pin a specific form instead of the auto-detected one, return its id from the `stanza_mailpoet_form_id` filter:
 
    ```php
    add_filter( 'stanza_mailpoet_form_id', fn () => 3 );
    ```
+
+   The detected id is cached in the `stanza_mailpoet_form_id` transient for an hour and flushed whenever a plugin is activated or deactivated. If MailPoet is active but has no enabled form, administrators see a notice in the form's place pointing at **MailPoet → Forms**; visitors see the neutral "not set up yet" message.
 
 3. **Native form action** — set the block's "Form action URL" attribute to a real endpoint (e.g. a list provider's POST URL).
 
@@ -133,6 +137,29 @@ This theme was tested against WordPress Studio and WordPress 7.0. Use Studio WP-
 ```bash
 studio wp theme activate stanza
 ```
+
+## Updates via Git Updater
+
+Stanza ships the headers [Git Updater](https://github.com/afragen/git-updater) needs, so an installed copy can update itself straight from this repository:
+
+```
+Update URI: https://github.com/crweiner/stanza
+GitHub Theme URI: https://github.com/crweiner/stanza
+Primary Branch: main
+Release Asset: true
+```
+
+Install Git Updater, and Stanza appears under **Settings → Git Updater → Themes**. No extra configuration is needed for a public repository.
+
+**Updates are driven by releases, not by commits.** Git Updater compares the installed version against the `Version:` header in `style.css` on `main`. Pushing a commit to `main` without touching that header offers no update. `Release Asset: true` means the update downloads the `stanza.zip` built and attached by `.github/workflows/release-theme-zip.yml`, which is the packaged theme — not a source archive containing `README.md`, `docs/`, or `.github/`.
+
+To cut a release:
+
+1. Bump `Version:` in `style.css` (and `Stable tag:` in `readme.txt`) on `main`.
+2. Tag that commit `vX.Y.Z` and publish a GitHub Release for the tag.
+3. The workflow builds `stanza.zip`, verifies its contents, and attaches it to the release.
+
+The workflow fails the build if the tag and the `Version:` header disagree, so a release can never advertise a version the theme does not report.
 
 ## Licensing
 
