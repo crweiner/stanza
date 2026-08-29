@@ -23,7 +23,10 @@ if ( '' !== $stanza_custom_html ) {
 	return;
 }
 
-$stanza_mailpoet_form = (int) apply_filters( 'stanza_mailpoet_form_id', 0 );
+$stanza_mailpoet_default = function_exists( 'stanza_default_mailpoet_form_id' )
+	? stanza_default_mailpoet_form_id()
+	: 0;
+$stanza_mailpoet_form = (int) apply_filters( 'stanza_mailpoet_form_id', $stanza_mailpoet_default );
 if ( $stanza_mailpoet_form && class_exists( '\MailPoet\API\API' ) ) {
 	printf(
 		'<div %s>%s</div>',
@@ -39,9 +42,13 @@ $stanza_action      = ! empty( $attributes['formAction'] ) ? $attributes['formAc
 $stanza_input_id    = ! empty( $attributes['inputId'] ) ? $attributes['inputId'] : wp_unique_id( 'stanza-subscribe-' );
 $stanza_disabled    = '' === $stanza_action;
 
-$stanza_notice = current_user_can( 'manage_options' )
-	? __( 'Connect a newsletter plugin (or the stanza_subscribe_form_html filter) to make this form live.', 'stanza' )
-	: __( 'Subscriptions aren’t set up yet — check back soon.', 'stanza' );
+if ( ! current_user_can( 'manage_options' ) ) {
+	$stanza_notice = __( 'Subscriptions aren’t set up yet — check back soon.', 'stanza' );
+} elseif ( class_exists( '\MailPoet\API\API' ) ) {
+	$stanza_notice = __( 'MailPoet is active but has no enabled form yet — create one under MailPoet → Forms.', 'stanza' );
+} else {
+	$stanza_notice = __( 'Connect a newsletter plugin (or the stanza_subscribe_form_html filter) to make this form live.', 'stanza' );
+}
 if ( ! $stanza_disabled && ! empty( $attributes['successMessage'] ) ) {
 	$stanza_notice = $attributes['successMessage'];
 }
