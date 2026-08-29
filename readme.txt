@@ -3,7 +3,7 @@ Contributors: crweiner
 Requires at least: 6.7
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,12 @@ No. Stanza styles the core Code block, but syntax highlighting, copy buttons, an
 Stanza does not include tracking or analytics. The color mode toggle stores a local browser preference in localStorage under the key `stanza-color-mode`; this value is not sent to the site owner or any third party by the theme.
 
 == Changelog ==
+
+= 2.0.1 =
+* The subscribe form now detects MailPoet on its own: with MailPoet active it renders the oldest enabled form, so no code is required. The stanza_mailpoet_form_id filter still pins a specific form, and stanza_subscribe_form_html still takes priority over both.
+* The form's admin-only placeholder now distinguishes "no newsletter plugin installed" from "MailPoet is active but has no form yet".
+* Added Git Updater headers so installed copies update from GitHub releases (GitHub Theme URI, Primary Branch, Release Asset), plus an Update URI so a same-slug theme on wordpress.org cannot hijack updates.
+* The release workflow now fails when a tag does not match the Version and Stable tag headers.
 
 = 2.0.0 =
 * Complete rebuild on WordPress primitives: theme.json is the single source of truth for every color, size, font, radius, and shadow.
