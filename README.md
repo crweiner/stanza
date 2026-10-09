@@ -108,7 +108,7 @@ Provider slot priority:
    add_filter( 'stanza_subscribe_form_html', fn () => $my_form_markup );
    ```
 
-2. **MailPoet** — detected automatically. With MailPoet active, the block renders your oldest enabled MailPoet form, normalized to the pill look; installing MailPoet and publishing a form is all that is required, with no code.
+2. **MailPoet** — detected automatically. With MailPoet active, the block renders your oldest enabled MailPoet form, normalized to the pill look; installing MailPoet and publishing a form is all that is required, with no code. An email + submit form (MailPoet's default) becomes the same single pill as the native form; a form with more fields stacks one pill per text field, and MailPoet's inline CAPTCHA step is styled to match.
 
    To pin a specific form instead of the auto-detected one, return its id from the `stanza_mailpoet_form_id` filter:
 

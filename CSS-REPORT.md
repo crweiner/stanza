@@ -4,7 +4,7 @@ Every selector shipped outside `theme.json`, per the build contract
 (`blueprint/02-css-disposition.md`). Everything else in the theme is theme.json
 presets/styles, block supports carried in markup, or block style variations.
 
-**Totals: 692 non-blank lines across 14 files** (28 of which are the
+**Totals: 827 non-blank lines across 14 files** (36 of which are the
 explicit `:focus-visible`/`:focus-within` accent rings on every custom
 interactive control — the handoff's "visible focus everywhere" floor) (WPCS one-declaration-per-line
 formatting, selectors and braces included), vs **2,544 lines in v1** — a 76%
@@ -51,7 +51,7 @@ always-dark/imagery surfaces (per `blueprint/04-color-modes.md`).
 | File | Lines | Notes |
 |---|---|---|
 | color-mode-toggle/style.css | 34 | 36px round icon button, sun/moon state swap, disabled state for forced-scheme variations. |
-| subscribe-form/style.css | 73 | The pill (flex, 52px, pill radius, border-color fill), accent submit + hover, on-cover white variant, notice line, and the spec-required MailPoet/provider normalization selectors. |
+| subscribe-form/style.css | 208 | The pill (flex, 52px, pill radius, border-color fill), accent submit + hover, on-cover white variant, notice line, and the MailPoet provider styles (135 lines). MailPoet prints its own markup with no pill wrapper, a per-form stylesheet keyed on `#mailpoet_form_N`, and inline `style` attributes on each control, so the surface is rebuilt on its markup: a visible pill per text field for any form; the single joined pill (grid + a `::before` spanning the row, gated by `:has()`) for the default email + submit form; the inline CAPTCHA step (full-width field, light chips behind its dark `<img>` icons); legible error text; and the absolutely-centred success message. The file's 11 `!important` flags are confined to properties those id rules or inline styles set — nothing else can outrank them. |
 | parallax-card/style.css | 85 | Positioning stack (media/scrim/body), parallax headroom (116% img), white type, white-outline chips for the on-image context, imageless petrol fallback, mobile padding step-down. |
 | nav-drawer/style.css | 144 | Toggle (44px target), `display:none` swap at 768px (replaces v1's ~45-rule `!important` mobile block), full-screen always-dark scrollable overlay (accent gradient via `color-mix`, `overscroll-behavior:contain`), 44px close circle raised above core's `z-index:1` nav links and offset below the admin bar (the overlay header's stacking context sits under the admin bar's z-index, so the drawer is offset rather than fighting it — matching core's nav-overlay approach), admin-bar offsets, big-type nav rows with hairlines and `→` markers, inline dark submenu expansion with 44px circular disclosure toggles (overriding the desktop flyout panel inside the drawer), reduced-motion-gated transition. |
 
