@@ -3,7 +3,7 @@ Contributors: crweiner
 Requires at least: 6.7
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,11 @@ No. Stanza styles the core Code block, but syntax highlighting, copy buttons, an
 Stanza does not include tracking or analytics. The color mode toggle stores a local browser preference in localStorage under the key `stanza-color-mode`; this value is not sent to the site owner or any third party by the theme.
 
 == Changelog ==
+
+= 2.0.2 =
+* Fixed invisible MailPoet email and text fields in the subscribe-form block, with visible pill surfaces and readable text in light and dark modes.
+* Email-and-submit forms now share a single pill; forms with more fields keep a stacked layout.
+* Improved the inline CAPTCHA field and icon contrast, validation error text, success message sizing, and keyboard focus styling.
 
 = 2.0.1 =
 * The subscribe form now detects MailPoet on its own: with MailPoet active it renders the oldest enabled form, so no code is required. The stanza_mailpoet_form_id filter still pins a specific form, and stanza_subscribe_form_html still takes priority over both.
